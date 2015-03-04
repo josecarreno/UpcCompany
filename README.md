@@ -1,2 +1,2 @@
 # UpcCompany
-Aplicación web en java
+Sample Java WebApp
