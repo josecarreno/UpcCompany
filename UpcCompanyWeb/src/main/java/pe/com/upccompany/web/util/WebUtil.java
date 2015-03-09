@@ -8,11 +8,13 @@ package pe.com.upccompany.web.util;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
+import pe.com.upccompany.dao.entity.Departamento;
 import pe.com.upccompany.dao.entity.Idioma;
 import pe.com.upccompany.service.base.BaseService;
 import pe.com.upccompany.service.impl.DepartamentoServiceImpl;
 import pe.com.upccompany.service.impl.EmpleadoServiceImpl;
 import pe.com.upccompany.service.impl.IdiomaServiceImpl;
+import pe.com.upccompany.util.SystemException;
 import pe.com.upccompany.util.SystemUtil;
 
 /**
@@ -57,5 +59,59 @@ public class WebUtil {
             baseService = IdiomaServiceImpl.obtenerInstancia();
         }
         return baseService;
+    }
+    
+    private static String generateUpdateBtnString(Departamento d, String page) {
+        Integer id = d.getIdDepartamento();
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a id='btnActDep");
+        sb.append(id.toString());
+        sb.append("' href='");
+        sb.append(page);
+        sb.append("?id=");
+        sb.append(id.toString());
+        sb.append("' class='btn btn-primary btn-xs'>Modificar</a>");
+        return sb.toString();
+    }
+
+    private static String generateDeleteBtnString(Departamento d, String page) {
+        Integer id = d.getIdDepartamento();
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a id='btnEliDep");
+        sb.append(id.toString());
+        sb.append("' href='");
+        sb.append(page);
+        sb.append("?id=");
+        sb.append(id.toString());
+        sb.append("&txtAction=ELIMINAR");
+        sb.append("' class='btn btn-danger btn-xs'>Eliminar</a>");
+        return sb.toString();
+    }
+
+    public static String generateJSONString(List<Departamento> lstDepartamento, Long count) throws SystemException {
+
+        StringBuilder sb = new StringBuilder();
+        Integer i = 0; //flag
+        sb.append("{\"total\": ");
+        sb.append(count);
+        sb.append(",\"rows\":");
+        sb.append("[");
+        for (Departamento d : lstDepartamento) {
+            sb.append("{\"idDepartamento\":\"");
+            sb.append(d.getIdDepartamento().toString());
+            sb.append("\",\"nombre\":\"");
+            sb.append(d.getNombre());
+            sb.append("\",\"actualizar\":\"");
+            sb.append(generateUpdateBtnString(d, "/UpcCompanyWeb/Pages/Departamento/actDepartamento.jsp"));
+            sb.append("\",\"eliminar\":\"");
+            sb.append(generateDeleteBtnString(d, "/UpcCompanyWeb/DepartamentoController"));
+            sb.append("\"}");
+            if (i < lstDepartamento.size() - 1) {
+                sb.append(",");
+            }
+            i++;
+        }
+        sb.append("]}");
+        return sb.toString();
     }
 }

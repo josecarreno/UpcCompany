@@ -7,14 +7,12 @@ package pe.com.upccompany.dao.hibernate.test;
 
 import java.util.List;
 import org.testng.Assert;
-import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pe.com.upccompany.dao.entity.Departamento;
-import pe.com.upccompany.dao.hibernate.base.EntityDao;
 import pe.com.upccompany.dao.hibernate.impl.DepartamentoHibernateDao;
 
 /**
@@ -26,7 +24,7 @@ public class DepartamentoTest {
     public DepartamentoTest() {
     }
 
-    private final EntityDao entity = DepartamentoHibernateDao.obtenerInstancia();
+    private final DepartamentoHibernateDao entity = DepartamentoHibernateDao.obtenerInstancia();
     private static Departamento departamento;
 
     @BeforeClass
@@ -94,4 +92,29 @@ public class DepartamentoTest {
             Assert.fail("Error: " + e.getMessage());
         }
     }
+    @Test(enabled = false)
+    public void listarPaginado() {
+        try {
+            List<Departamento> lista = entity.listarPaginado(100, 0, "nombre", "asc", null);
+            for (Departamento dep : lista) {
+                System.out.println(dep.getNombre());
+            }
+            Assert.assertTrue(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Error: " + e.getMessage());
+        }
+    }
+    @Test(enabled = false)
+    public void count() {
+        try {
+            Long count = entity.count();
+            System.out.println(count);
+            Assert.assertTrue(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Error: " + e.getMessage());
+        }
+    }
+    
 }

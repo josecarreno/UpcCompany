@@ -1,23 +1,7 @@
 
 <%@page import="pe.com.upccompany.util.SystemUtil"%>
-<%@page import="pe.com.upccompany.dao.entity.Departamento"%>
-<%@page import="java.util.List"%>
-<%@page import="pe.com.upccompany.web.util.WebUtil"%>
-<%@page import="pe.com.upccompany.service.DepartamentoService"%>
-<%-- 
-    Document   : mntDepartamento
-    Created on : Feb 6, 2015, 3:58:14 PM
-    Author     : Renato
---%>
 <%
-    DepartamentoService departamentoService = (DepartamentoService) WebUtil.obtenerService("DEPARTAMENTO");
-    List<Departamento> listaDepartamentos = null;
     String mensaje = SystemUtil.validaNulo(request.getParameter("mensaje"));
-    try {
-        listaDepartamentos = departamentoService.listar();
-    } catch (Exception ex) {
-        mensaje = WebUtil.controlarError(ex);
-    }
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -53,54 +37,36 @@
                             %>
                             <a id="btnRegDep" href="<%= rReg%>" class="btn btn-default pull-right">Registrar departamento</a>
                         </div>
-                        <table id="tabla" data-toggle="table"
-                               class="table table-hover table-striped table-responsive"
-                               data-sort-name="ID"
-                               data-sort-order="asc"
+                        <table id="table" 
+                               data-toggle="table"
+                               data-url="<%= request.getContextPath() %>/DepartamentoController?txtAction=LISTAR"
+                               data-sort-name="idDepartamento"
+                               data-sort-order="desc"
                                data-search="true"
                                data-pagination="true"
+                               data-side-pagination="server"
                                data-show-toggle="true"
                                data-show-columns="true"
-                               data-toolbar="#toolbar">
+                               data-toolbar="#toolbar"
+                               class="table table-hover table-striped table-responsive">
                             <thead>
                                 <tr>
-                                    <th data-field="ID"
+                                    <th data-field="idDepartamento"
                                         data-sortable="true">
                                         ID
                                     </th>
-                                    <th data-sortable="true">
+                                    <th data-field="nombre"
+                                        data-sortable="true">
                                         Departamento
                                     </th>
-                                    <th>
+                                    <th data-field="actualizar">
                                         <span class="glyphicon glyphicon-cog"></span>
                                     </th>
-                                    <th>
+                                    <th data-field="eliminar">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <% if (listaDepartamentos != null) {
-                                        for (Departamento d : listaDepartamentos) {
-                                %>
-                                <tr>
-                                    <td><%= d.getIdDepartamento()%></td>
-                                    <td><%= d.getNombre()%></td>
-
-                                    <%
-                                        String rAct = request.getContextPath() + "/Pages/Departamento/actDepartamento.jsp";
-                                        rAct += "?id=" + d.getIdDepartamento();
-                                        String rEli = request.getContextPath() + "/DepartamentoController";
-                                        rEli += "?id=" + d.getIdDepartamento() + "&txtAction=ELIMINAR";
-                                    %>
-                                    <td><a  id="btnActDep<%= d.getIdDepartamento()%>" href="<%= rAct%>" class="btn btn-primary btn-xs">Modificar</a></td>
-                                    <td><a  id="btnEliDep<%= d.getIdDepartamento()%>" href="<%= rEli%>" class="btn btn-danger btn-xs">Eliminar</a></td>
-                                </tr>
-                                <%
-                                        }
-                                    }
-                                %>
-                            </tbody>
+                            </thead>                            
                         </table>
                     </div> 
                 </div>

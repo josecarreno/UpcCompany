@@ -13,6 +13,7 @@ import pe.com.upccompany.util.SystemException;
  * @author José
  * @param <E> -> entidad
  * @param <J> -> primary key
+ * @param <S> -> string sort, order, search
  */
 public interface EntityDao<E, J> {
 
@@ -25,4 +26,5 @@ public interface EntityDao<E, J> {
     E obtener(J id) throws SystemException;
 
     List<E> listar() throws SystemException;
+    
 }

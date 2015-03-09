@@ -57,5 +57,5 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     public List<Empleado> listar() throws SystemException {
         return empleadoDao.listar();
-    }   
+    }
 }

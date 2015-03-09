@@ -1,6 +1,7 @@
 package pe.com.upccompany.web.controller;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,7 +39,14 @@ public class DepartamentoController extends HttpServlet {
     protected void eliminar(HttpServletRequest request) throws SystemException {
         DEPARTAMENTO_SERVICE.eliminar(Integer.parseInt(request.getParameter("id")));
     }
-
+    protected List<Departamento> listar(HttpServletRequest request) throws SystemException {
+        Integer limit = Integer.parseInt(request.getParameter("limit"));
+        Integer offset = Integer.parseInt(request.getParameter("offset"));
+        String sort = request.getParameter("sort");
+        String order = request.getParameter("order");
+        String search = request.getParameter("search");
+        return DEPARTAMENTO_SERVICE.listarPaginado(limit, offset, sort, order, search);
+    }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -58,6 +66,13 @@ public class DepartamentoController extends HttpServlet {
                 eliminar(request);
                 mensaje = "Se elimino correctamente el departamento";
                 pagina = "/Pages/Departamento/mntDepartamento.jsp?mensaje=";
+            } else if (("LISTAR").equalsIgnoreCase(accion)) {
+                Long count = DEPARTAMENTO_SERVICE.count();
+                String json = WebUtil.generateJSONString(listar(request), count);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
+                return;
             }
         } catch (Exception ex) {
             LOGGER.error(ex);

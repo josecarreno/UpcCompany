@@ -58,5 +58,15 @@ public class DepartamentoServiceImpl implements DepartamentoService{
     public List<Departamento> listar() throws SystemException {
         return departamentoDao.listar();
     }
+
+    @Override
+    public List<Departamento> listarPaginado(Integer limit, Integer offset, String sort, String order, String search) throws SystemException {
+        return departamentoDao.listarPaginado(limit, offset, sort, order, search);
+    }
+
+    @Override
+    public Long count() throws SystemException {
+        return departamentoDao.count();
+    }
     
 }

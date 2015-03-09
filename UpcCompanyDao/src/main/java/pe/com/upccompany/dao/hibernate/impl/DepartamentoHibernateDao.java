@@ -103,4 +103,58 @@ public class DepartamentoHibernateDao extends BaseHibernateDao implements Depart
         return lista;
     }
 
+    @Override
+    public List<Departamento> listarPaginado(Integer limit,
+            Integer offset,
+            String sort,
+            String order,
+            String search)
+            throws SystemException {
+        Session session = null;
+        List<Departamento> lista = null;
+        if (order == null) {
+            order = "DESC";
+        } else {
+            order = order.toUpperCase();
+        }
+        if (sort == null) {
+            sort = "idDepartamento";
+        }
+        try {
+            session = obtenerSesion();
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT d FROM Departamento d WHERE ");
+            sb.append("(d.eliminado = 0)");
+            sb.append(" AND (:search is null OR (nombre LIKE '%' || :search || '%'))");
+            sb.append(" ORDER BY d.");
+            sb.append(sort);
+            sb.append(" ");
+            sb.append(order);
+            String hql = sb.toString();
+            Query query = session.createQuery(hql)
+                    .setFirstResult(offset)
+                    .setMaxResults(limit)
+                    .setParameter("search", search);
+            lista = query.list();
+        } finally {
+            cerrar(session);
+        }
+        return lista;
+    }
+
+    @Override
+    public Long count() throws SystemException {
+        Session session = null;
+        Long count = null;
+        try {
+            session = obtenerSesion();
+            String hql = "SELECT COUNT(*) FROM Departamento d WHERE d.eliminado = 0";
+            Query query = session.createQuery(hql);
+            count = (Long)query.uniqueResult();
+            return count;
+        } finally {
+            cerrar(session);       
+        }  
+    }
+
 }

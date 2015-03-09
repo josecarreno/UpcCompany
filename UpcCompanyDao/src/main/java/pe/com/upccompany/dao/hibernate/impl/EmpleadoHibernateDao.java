@@ -103,4 +103,9 @@ public class EmpleadoHibernateDao extends BaseHibernateDao implements EmpleadoDa
         return lista;
     }
 
+    @Override
+    public List<Empleado> listarPaginado(Integer limit, Integer offset, String sort, String order, String search) throws SystemException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
