@@ -9,6 +9,7 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 import pe.com.upccompany.dao.entity.Departamento;
+import pe.com.upccompany.dao.entity.Empleado;
 import pe.com.upccompany.dao.entity.Idioma;
 import pe.com.upccompany.service.base.BaseService;
 import pe.com.upccompany.service.impl.DepartamentoServiceImpl;
@@ -88,7 +89,7 @@ public class WebUtil {
         return sb.toString();
     }
 
-    public static String generateJSONString(List<Departamento> lstDepartamento, Long count) throws SystemException {
+    public static String generateJSONStringDepartamento(List<Departamento> lstDepartamento, Long count) throws SystemException {
 
         StringBuilder sb = new StringBuilder();
         Integer i = 0; //flag
@@ -107,6 +108,76 @@ public class WebUtil {
             sb.append(generateDeleteBtnString(d, "/UpcCompanyWeb/DepartamentoController"));
             sb.append("\"}");
             if (i < lstDepartamento.size() - 1) {
+                sb.append(",");
+            }
+            i++;
+        }
+        sb.append("]}");
+        return sb.toString();
+    }
+     private static String generateUpdateBtnString(Empleado e, String page) {
+        Integer id = e.getIdEmpleado();
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a id='btnActEmp");
+        sb.append(id.toString());
+        sb.append("' href='");
+        sb.append(page);
+        sb.append("?id=");
+        sb.append(id.toString());
+        sb.append("' class='btn btn-primary btn-xs'>Modificar</a>");
+        return sb.toString();
+    }
+
+    private static String generateDeleteBtnString(Empleado e, String page) {
+        Integer id = e.getIdEmpleado();
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a id='btnEliEmp");
+        sb.append(id.toString());
+        sb.append("' href='");
+        sb.append(page);
+        sb.append("?id=");
+        sb.append(id.toString());
+        sb.append("&txtAction=ELIMINAR");
+        sb.append("' class='btn btn-danger btn-xs'>Eliminar</a>");
+        return sb.toString();
+    }
+
+    /**
+     *
+     * @param lstEmpleado
+     * @param count
+     * @return
+     * @throws SystemException
+     */
+    public static String generateJSONStringEmpleado(List<Empleado> lstEmpleado, Long count) throws SystemException {
+
+        StringBuilder sb = new StringBuilder();
+        Integer i = 0; //flag
+        sb.append("{\"total\": ");
+        sb.append(count);
+        sb.append(",\"rows\":");
+        sb.append("[");
+        for (Empleado e : lstEmpleado) {
+            sb.append("{\"idEmpleado\":\"");
+            sb.append(e.getIdEmpleado().toString());
+            sb.append("\",\"dni\":\"");
+            sb.append(e.getDni());
+            sb.append("\",\"nombre\":\"");
+            sb.append(e.getNombre());
+            sb.append("\",\"apellido\":\"");
+            sb.append(e.getApellido());
+            sb.append("\",\"sexo\":\"");
+            sb.append(e.getSexo());
+            sb.append("\",\"departamento\":\"");
+            sb.append(e.getIdDepartamento().getNombre());
+            sb.append("\",\"idiomas\":\"");
+            sb.append(encadenaIdiomas(e.getIdiomaList()));
+            sb.append("\",\"actualizar\":\"");
+            sb.append(generateUpdateBtnString(e, "/UpcCompanyWeb/Pages/Empleado/actEmpleado.jsp"));
+            sb.append("\",\"eliminar\":\"");
+            sb.append(generateDeleteBtnString(e, "/UpcCompanyWeb/EmpleadoController"));
+            sb.append("\"}");
+            if (i < lstEmpleado.size() - 1) {
                 sb.append(",");
             }
             i++;

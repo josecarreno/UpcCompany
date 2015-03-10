@@ -58,4 +58,14 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     public List<Empleado> listar() throws SystemException {
         return empleadoDao.listar();
     }
+
+    @Override
+    public List<Empleado> listarPaginado(Integer limit, Integer offset, String sort, String order, String search) throws SystemException {
+        return empleadoDao.listarPaginado(limit, offset, sort, order, search);
+    }
+
+    @Override
+    public Long count(String search) throws SystemException {
+        return empleadoDao.count(search);
+    }
 }

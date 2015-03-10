@@ -1,3 +1,9 @@
 .btn-w-top-margin {
     margin-top: 20px;
 }
+.dropup > .dropdown-toggle {
+    padding: 5px;
+}
+.pagination-detail {
+    padding-top: 10px;
+}

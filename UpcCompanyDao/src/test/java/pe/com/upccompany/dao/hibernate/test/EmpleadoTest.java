@@ -30,7 +30,7 @@ public class EmpleadoTest {
     public EmpleadoTest() {
     }
 
-    private final EntityDao entity = EmpleadoHibernateDao.obtenerInstancia();
+    private final EmpleadoHibernateDao entity = EmpleadoHibernateDao.obtenerInstancia();
     private static Empleado empleado;
 
     @BeforeClass
@@ -54,40 +54,40 @@ public class EmpleadoTest {
         try {
             empleado = new Empleado();
             empleado.setNombre("empleado de prueba");
-            
+
             Idioma idioma = new Idioma();
             idioma.setIdIdioma(1);
             List<Idioma> idiomas = new ArrayList<Idioma>();
             idiomas.add(idioma);
             empleado.setIdiomaList(idiomas);
-            
+
             Departamento departamento = new Departamento();
             departamento.setIdDepartamento(1);
             empleado.setIdDepartamento(departamento);
-            
+
             entity.insertar(empleado);
-            Assert.assertTrue(empleado.getIdEmpleado()> 0);
+            Assert.assertTrue(empleado.getIdEmpleado() > 0);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Error: " + e.getMessage());
         }
     }
 
-    @Test(dependsOnMethods = {"insertar"} , enabled = false)
+    @Test(dependsOnMethods = {"insertar"}, enabled = false)
     public void actualizar() {
         try {
             empleado.setNombre("empleado actualizado");
-            
+
             Idioma idioma = new Idioma();
             idioma.setIdIdioma(2);
             List<Idioma> idiomas = new ArrayList<Idioma>();
             idiomas.add(idioma);
             empleado.setIdiomaList(idiomas);
-            
+
             Departamento departamento = new Departamento();
             departamento.setIdDepartamento(2);
             empleado.setIdDepartamento(departamento);
-            
+
             entity.actualizar(empleado);
             Assert.assertTrue(true);
         } catch (Exception e) {
@@ -106,6 +106,7 @@ public class EmpleadoTest {
             Assert.fail("Error: " + ex.getMessage());
         }
     }
+
     @Test(enabled = false)
     public void listar() {
         try {
@@ -118,6 +119,35 @@ public class EmpleadoTest {
                     System.out.println(idioma.getNombre());
                 }
             }
+            Assert.assertTrue(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Error: " + e.getMessage());
+        }
+    }
+
+    @Test(enabled = false)
+    public void listarPaginado() {
+        try {
+            List<Empleado> lista = entity.listarPaginado(100, 0, "nombre", "asc", null);
+            for (Empleado emp : lista) {
+                System.out.println(emp.getIdDepartamento());
+                System.out.println(emp.getDni());
+                System.out.println(emp.getNombre());
+                System.out.println(emp.getApellido());
+            }
+            Assert.assertTrue(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Error: " + e.getMessage());
+        }
+    }
+
+    @Test(enabled = true)
+    public void count() {
+        try {
+            Long count = entity.count(null);
+            System.out.println(count.toString());
             Assert.assertTrue(true);
         } catch (Exception e) {
             e.printStackTrace();

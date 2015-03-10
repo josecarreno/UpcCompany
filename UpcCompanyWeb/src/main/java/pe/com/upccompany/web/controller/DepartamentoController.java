@@ -68,7 +68,7 @@ public class DepartamentoController extends HttpServlet {
                 pagina = "/Pages/Departamento/mntDepartamento.jsp?mensaje=";
             } else if (("LISTAR").equalsIgnoreCase(accion)) {
                 Long count = DEPARTAMENTO_SERVICE.count(request.getParameter("search"));
-                String json = WebUtil.generateJSONString(listar(request), count);
+                String json = WebUtil.generateJSONStringDepartamento(listar(request), count);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(json);

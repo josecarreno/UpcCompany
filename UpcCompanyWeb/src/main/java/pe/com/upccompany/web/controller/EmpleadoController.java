@@ -83,7 +83,14 @@ public class EmpleadoController extends HttpServlet {
     protected void eliminar(HttpServletRequest request) throws SystemException {
         EMPLEADO_SERVICE.eliminar(Integer.parseInt(request.getParameter("id")));
     }
-
+    protected List<Empleado> listar(HttpServletRequest request) throws SystemException {
+        Integer limit = Integer.parseInt(request.getParameter("limit"));
+        Integer offset = Integer.parseInt(request.getParameter("offset"));
+        String sort = request.getParameter("sort");
+        String order = request.getParameter("order");
+        String search = request.getParameter("search");
+        return EMPLEADO_SERVICE.listarPaginado(limit, offset, sort, order, search);
+    }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -103,6 +110,13 @@ public class EmpleadoController extends HttpServlet {
                 eliminar(request);
                 mensaje = "Se elimino correctamente el empleado";
                 pagina = "/Pages/Empleado/mntEmpleado.jsp?mensaje=";
+            } else if (("LISTAR").equalsIgnoreCase(accion)) {
+                Long count = EMPLEADO_SERVICE.count(request.getParameter("search"));
+                String json = WebUtil.generateJSONStringEmpleado(listar(request), count);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
+                return;
             }
         } catch (Exception ex) {
             LOGGER.error(ex);

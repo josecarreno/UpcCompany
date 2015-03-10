@@ -21,4 +21,5 @@ public interface EmpleadoDao extends EntityDao<Empleado, Integer>{
             String order,
             String search) 
             throws SystemException;
+        public Long count(String search) throws SystemException;
 }

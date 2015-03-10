@@ -104,8 +104,70 @@ public class EmpleadoHibernateDao extends BaseHibernateDao implements EmpleadoDa
     }
 
     @Override
-    public List<Empleado> listarPaginado(Integer limit, Integer offset, String sort, String order, String search) throws SystemException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Empleado> listarPaginado(
+            Integer limit,
+            Integer offset,
+            String sort,
+            String order,
+            String search)
+            throws SystemException {
+        Session session = null;
+        List<Empleado> lista = null;
+        if (order == null) {
+            order = "DESC";
+        } else {
+            order = order.toUpperCase();
+        }
+        if (sort == null) {
+            sort = "idEmpleado";
+        } else if ("departamento".equalsIgnoreCase(sort)) {
+            sort = "idDepartamento.nombre";
+        }
+        try {
+            session = obtenerSesion();
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT e FROM Empleado e WHERE ");
+            sb.append("(e.eliminado = 0)");
+            sb.append(" AND (:search is null");
+            sb.append(" OR ( CONCAT(idEmpleado, dni, ' ', nombre, ' ', apellido, ' ', sexo )"); 
+            sb.append(" LIKE '%' || :search || '%')");
+            sb.append(")");
+            sb.append(" ORDER BY e.");
+            sb.append(sort);
+            sb.append(" ");
+            sb.append(order);
+            String hql = sb.toString();
+            Query query = session.createQuery(hql)
+                    .setFirstResult(offset)
+                    .setMaxResults(limit)
+                    .setParameter("search", search);
+            lista = query.list();
+        } finally {
+            cerrar(session);
+        }
+        return lista;
+    }
+
+    @Override
+    public Long count(String search) throws SystemException {
+        Session session = null;
+        Long count = null;
+        try {
+            session = obtenerSesion();
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT COUNT(e) FROM Empleado e WHERE ");
+            sb.append("(e.eliminado = 0)");
+            sb.append(" AND (:search is null");
+            sb.append(" OR ( CONCAT(idEmpleado, dni, ' ', nombre, ' ', apellido, ' ', sexo )"); 
+            sb.append(" LIKE '%' || :search || '%')");
+            sb.append(")");
+            Query query = session.createQuery(sb.toString())
+                    .setParameter("search", search);
+            count = (Long) query.uniqueResult();
+            return count;
+        } finally {
+            cerrar(session);
+        }
     }
 
 }
