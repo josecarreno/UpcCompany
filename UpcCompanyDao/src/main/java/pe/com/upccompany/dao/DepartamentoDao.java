@@ -21,5 +21,5 @@ public interface DepartamentoDao extends EntityDao<Departamento, Integer> {
             String order,
             String search) 
             throws SystemException;
-    public Long count() throws SystemException;
+    public Long count(String search) throws SystemException;
 }

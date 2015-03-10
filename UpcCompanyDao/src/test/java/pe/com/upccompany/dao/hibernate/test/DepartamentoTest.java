@@ -92,11 +92,12 @@ public class DepartamentoTest {
             Assert.fail("Error: " + e.getMessage());
         }
     }
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void listarPaginado() {
         try {
-            List<Departamento> lista = entity.listarPaginado(100, 0, "nombre", "asc", null);
+            List<Departamento> lista = entity.listarPaginado(100, 0, "nombre", "asc", "14 prueba modificada");
             for (Departamento dep : lista) {
+                System.out.print(dep.getIdDepartamento()+ " ");
                 System.out.println(dep.getNombre());
             }
             Assert.assertTrue(true);
@@ -105,12 +106,12 @@ public class DepartamentoTest {
             Assert.fail("Error: " + e.getMessage());
         }
     }
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void count() {
         try {
-            Long count = entity.count();
-            System.out.println(count);
-            Assert.assertTrue(true);
+            Long count = entity.count(null);
+            System.out.println("Filas: " + count.toString());
+            Assert.assertTrue(count >= 0);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Error: " + e.getMessage());

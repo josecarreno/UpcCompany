@@ -67,7 +67,7 @@ public class DepartamentoController extends HttpServlet {
                 mensaje = "Se elimino correctamente el departamento";
                 pagina = "/Pages/Departamento/mntDepartamento.jsp?mensaje=";
             } else if (("LISTAR").equalsIgnoreCase(accion)) {
-                Long count = DEPARTAMENTO_SERVICE.count();
+                Long count = DEPARTAMENTO_SERVICE.count(request.getParameter("search"));
                 String json = WebUtil.generateJSONString(listar(request), count);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
@@ -76,6 +76,7 @@ public class DepartamentoController extends HttpServlet {
             }
         } catch (Exception ex) {
             LOGGER.error(ex);
+            response.setContentType("text/html");
             mensaje = WebUtil.controlarError(ex);
             pagina = "/error.jsp?mensaje=";
         }

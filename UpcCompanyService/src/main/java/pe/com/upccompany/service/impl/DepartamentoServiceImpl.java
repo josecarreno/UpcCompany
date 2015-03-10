@@ -65,8 +65,8 @@ public class DepartamentoServiceImpl implements DepartamentoService{
     }
 
     @Override
-    public Long count() throws SystemException {
-        return departamentoDao.count();
+    public Long count(String search) throws SystemException {
+        return departamentoDao.count(search);
     }
     
 }
